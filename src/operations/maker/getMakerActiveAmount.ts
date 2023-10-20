@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ChainId, LimitOrderDomain, token1 } from "../../libs/constants";
+import { ChainId, LimitOrderDomain, makerAsset } from "../../libs/constants";
 import { getSigner } from "../../libs/signer";
 import { OpenOrder } from "../../entities/openOrder";
 
@@ -12,13 +12,13 @@ export async function getMakerActiveAmount(): Promise<OpenOrder[]> {
     const targetPathConfig = {
         params: {
             chainId: ChainId.MATIC,
-            makerAsset: token1.address,
+            makerAsset: makerAsset.address,
             maker: signerAddress
         }
     };
 
     try {
-        console.log(`\nGetting maker active making amount for ${token1.symbol}...`)
+        console.log(`\nGetting maker active making amount for ${makerAsset.symbol}...`)
         const {data} = await axios.get(
             LimitOrderDomain+targetPath,
             targetPathConfig

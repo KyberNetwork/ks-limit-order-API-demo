@@ -1,9 +1,10 @@
 import axios from "axios";
-import { LimitOrderDomain } from "../../libs/constants";
+import { LimitOrderDomain, takerAsset } from "../../libs/constants";
 import { getSigner } from "../../libs/signer";
 import { getOrders } from "./getOrders";
 import { getOperatorSignature } from "./getOperatorSignature";
 import { getContracts } from "../getContracts";
+import { getTokenApproval } from "../../libs/approval";
 
 interface FillBatchOrdersBody {
     orderIds: number[],
@@ -31,6 +32,13 @@ export async function postFillBatchOrders() {
 
     // Get the LO contract address to interact with on-chain
     const limitOrderContract = (await getContracts()).latest;
+
+    // Check if Taker has sufficient allowance to spend takerAsset
+    await getTokenApproval(
+        takerAsset.address,
+        limitOrderContract,
+        takingAmount
+    );
     
     try {
         console.log(`\nPosting the fill batch order...`);

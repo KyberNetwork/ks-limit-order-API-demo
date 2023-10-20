@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LimitOrderDomain, ChainId, token0, token1 } from "../../libs/constants";
+import { LimitOrderDomain, ChainId, makerAsset, takerAsset } from "../../libs/constants";
 import { Order } from "../../entities/order";
 
 export async function getOrders(): Promise<Order[]> {
@@ -9,8 +9,8 @@ export async function getOrders(): Promise<Order[]> {
     const targetPathConfig = {
         params: {
             chainId: ChainId.MATIC,
-            makerAsset: token1.address, // USDC
-            takerAsset: token0.address  // KNC  
+            makerAsset: makerAsset.address, // USDC
+            takerAsset: takerAsset.address  // KNC  
         }
     };
 

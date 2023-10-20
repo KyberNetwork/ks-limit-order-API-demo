@@ -31,7 +31,7 @@ export enum ChainId {
     SOLANA_DEVNET = 103, //fake id
   };
 
-export const token0: Token = {
+export const takerAsset: Token = {
     address: '0x1c954e8fe737f99f68fa1ccda3e51ebdb291948c',
     chainId: ChainId.MATIC.toString(),
     decimals: 18,
@@ -39,7 +39,7 @@ export const token0: Token = {
     name: 'KyberNetwork Crystal v2 (PoS)'
 };
 
-export const token1: Token = {
+export const makerAsset: Token = {
     address: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
     chainId: ChainId.MATIC.toString(),
     decimals: 6,

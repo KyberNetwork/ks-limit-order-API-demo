@@ -16,7 +16,7 @@ export async function getSupportedPairs(): Promise<Pairs[]> {
     };
 
     try {
-        console.log(`\nGetting supported pairs on for ChainId ${ChainId.MATIC}...`);
+        console.log(`\nGetting supported pairs on ChainId ${ChainId.MATIC}...`);
         const {data} = await axios.get(
             LimitOrderDomain+targetPath,
             targetPathConfig

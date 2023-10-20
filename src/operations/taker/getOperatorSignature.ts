@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ChainId, LimitOrderDomain, token0, token1 } from "../../libs/constants";
+import { ChainId, LimitOrderDomain, makerAsset, takerAsset } from "../../libs/constants";
 import { getSigner } from "../../libs/signer";
 import { getOrders } from "./getOrders";
 
@@ -20,8 +20,8 @@ export async function getOperatorSignature(): Promise<OperatorSignatureResponse[
     const orders = await getOrders();
     const targetOrders = orders.filter(order => 
         order.maker.toLowerCase() == signerAddress.toLowerCase() &&
-        order.makerAsset.toLowerCase() == token1.address.toLowerCase() &&
-        order.takerAsset.toLowerCase() == token0.address.toLowerCase()
+        order.makerAsset.toLowerCase() == makerAsset.address.toLowerCase() &&
+        order.takerAsset.toLowerCase() == takerAsset.address.toLowerCase()
     );
     const targetOrderId = Number(targetOrders[0].id);
 

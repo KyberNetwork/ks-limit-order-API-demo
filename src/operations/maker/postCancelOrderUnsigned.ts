@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LimitOrderDomain, ChainId, token0, token1 } from "../../libs/constants";
+import { LimitOrderDomain, ChainId, takerAsset, makerAsset } from "../../libs/constants";
 import { getSigner } from "../../libs/signer";
 import { getOrders } from "../taker/getOrders";
 import { EIP712TypedData } from "../../entities/EIP712";
@@ -20,8 +20,8 @@ export async function postCancelOrderUnsigned(): Promise<{requestBody: CancelOrd
     const orders = await getOrders();
     const targetOrder = orders.filter(order => 
         order.maker.toLowerCase() == signerAddress.toLowerCase() &&
-        order.makerAsset.toLowerCase() == token1.address.toLowerCase() &&
-        order.takerAsset.toLowerCase() == token0.address.toLowerCase()
+        order.makerAsset.toLowerCase() == makerAsset.address.toLowerCase() &&
+        order.takerAsset.toLowerCase() == takerAsset.address.toLowerCase()
     );
     const targetOrderId = Number(targetOrder[0].id);
 
@@ -32,6 +32,8 @@ export async function postCancelOrderUnsigned(): Promise<{requestBody: CancelOrd
         orderIds: [targetOrderId]
     };
 
+    console.debug(requestBody)
+
     try {
         console.log(`\nGetting the unsigned cancellation order...`);
         const {data} = await axios.post(
@@ -40,7 +42,7 @@ export async function postCancelOrderUnsigned(): Promise<{requestBody: CancelOrd
         );
 
         console.log(`Unsigned cancellation order:`);
-        console.debug(data.data)
+        console.debug(data.data.types)
 
         // Return the request body used and the EIP712 unsigned data
         return {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LimitOrderDomain, token0, token1 } from "../../libs/constants";
+import { LimitOrderDomain, makerAsset, takerAsset } from "../../libs/constants";
 import { getSigner } from "../../libs/signer";
 import { getMakerOrders } from "./getMakerOrders";
 import { getContracts } from "../getContracts";
@@ -18,8 +18,8 @@ export async function postCancelBatchOrders() {
     // Get the order ID to be cancelled
     const orders = await getMakerOrders();
     const targetOrders = orders.filter(order => 
-        order.makerAsset.toLowerCase() == token1.address.toLowerCase() &&
-        order.takerAsset.toLowerCase() == token0.address.toLowerCase()
+        order.makerAsset.toLowerCase() == makerAsset.address.toLowerCase() &&
+        order.takerAsset.toLowerCase() == takerAsset.address.toLowerCase()
     );
     const targetOrderId = Number(targetOrders[targetOrders.length-1].id);
 

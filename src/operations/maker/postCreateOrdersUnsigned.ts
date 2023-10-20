@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LimitOrderDomain, ChainId, token0, token1 } from "../../libs/constants";
+import { LimitOrderDomain, ChainId, makerAsset, takerAsset } from "../../libs/constants";
 import { getSigner } from "../../libs/signer";
 import { EIP712TypedData } from "../../entities/EIP712";
 
@@ -26,14 +26,16 @@ export async function postCreateOrderUnsigned(): Promise<{requestBody: CreateOrd
     // Structure the request to be sent in POST body
     const requestBody: CreateOrderUnsignedBody = {
         chainId: ChainId.MATIC.toString(),
-        makerAsset: token1.address, // USDC
-        takerAsset: token0.address, // KNC
+        makerAsset: makerAsset.address, // USDC
+        takerAsset: takerAsset.address, // KNC
         maker: signerAddress,
         allowedSenders: [signerAddress], // Included so that only our account can fill this order
         makingAmount: "10000", // 0.01 USDC
         takingAmount: "20000000000000000", // 0.02 KNC
         expiredAt: Math.floor(Date.now() / 1000) + 60 * 60 // 60mins
     };
+
+    console.debug(requestBody);
 
     try {
         console.log(`\nGetting the unsigned creation order...`);
@@ -43,7 +45,7 @@ export async function postCreateOrderUnsigned(): Promise<{requestBody: CreateOrd
         );
 
         console.log(`Unsigned creation order:`);
-        console.debug(data.data)
+        console.debug(data.data);
 
         // Return the request used and the EIP712 unsigned data
         return {
