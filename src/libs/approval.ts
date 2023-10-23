@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import ERC20ABI from "../abis/erc20.json"
-import { getSignerPrivate } from "./signerPrivate";
+import { getSigner } from "./signer";
 
 
 export async function getTokenApproval(
@@ -9,20 +9,20 @@ export async function getTokenApproval(
     spendingAmount: number
     ) {
     // Get the owner address
-    const signer = getSignerPrivate();
+    const signer = getSigner();
     const signerAddress = await signer.getAddress();
 
     // Check if the spender has sufficient allowance
-    const takerAssetContract = new ethers.Contract(tokenContractAddress, ERC20ABI, signer);
-    const takerAssetAllowance = await takerAssetContract.allowance(signerAddress, spenderAddress);
-    console.log(`token (${await takerAssetContract.symbol()}) Allowance: ${takerAssetAllowance}`);
+    const tokenContract = new ethers.Contract(tokenContractAddress, ERC20ABI, signer);
+    const limitOrderContractAllowance = await tokenContract.allowance(signerAddress, spenderAddress);
+    console.log(`token (${await tokenContract.symbol()}) Allowance: ${limitOrderContractAllowance}`);
     
     
-    if (Number(takerAssetAllowance) < spendingAmount) {
-        console.log(`Insufficient allowance, getting approval for ${await takerAssetContract.symbol()}...`);
+    if (Number(limitOrderContractAllowance) < spendingAmount) {
+        console.log(`Insufficient allowance, getting approval for ${await tokenContract.symbol()}...`);
         try {
             // Call the ERC20 approve method
-            const approvalTx = await takerAssetContract.approve(
+            const approvalTx = await tokenContract.approve(
                 spenderAddress, 
                 BigInt(spendingAmount), 
                 {maxFeePerGas: 100000000000, maxPriorityFeePerGas: 100000000000}
